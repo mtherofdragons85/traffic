@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Speeding Tickets</title>
+  <!-- Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <!-- jQuery and Bootstrap JS links -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <!-- Vue.js CDN link -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <nav class="navbar navbar-inverse">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Our Website</a>
+      </div>
+      <div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="index.html">All Tickets</a></li>
+          <li><a href="25over.html">25mph or more over</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Vue.js App -->
+    <div id="ticketApp">
+      <h2>Tickets July 4, 2014, Minneapolis/St. Paul</h2>
+
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th>Ticket ID</th>
+          <th>Time</th>
+          <th>Posted Speed</th>
+          <th>MPH Over</th>
+          <th>Violator Sex</th>
+        </tr>
+        <tr v-for="ticket in tickets" :key="ticket.tid">
+          <td>{{ ticket.tid }}</td>
+          <td>{{ ticket.stop_time }}</td>
+          <td>{{ ticket.posted_speed }}</td>
+          <td>{{ ticket.actual_speed - ticket.posted_speed }}</td>
+          <td>{{ ticket.violator_sex }}</td>
+        </tr>
+      </table>
+    </div> <!-- end ticketApp -->
+  </div> <!-- end container -->
+
+  <script>
+    new Vue({
+      el: '#ticketApp',
+      data() {
+        return {
+          tickets: []
+        }
+      },
+      created() {
+        this.getData()
+      },
+      methods: {
+        async getData() {
+          try {
+            const response = await fetch('tickets1.json')
+            this.tickets = await response.json()
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        },
+      }
+    });
+  </script>
+</body>
+
+</html>
